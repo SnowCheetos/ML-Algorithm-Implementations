@@ -10,9 +10,3 @@ class MSELoss:
 
     def backward(self, pred, y):
         self.dx = 2*(1/y.shape[0])*(pred - y)
-
-
-class CELoss:
-
-    def __init__(self):
-        pass
