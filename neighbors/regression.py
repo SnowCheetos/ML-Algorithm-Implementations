@@ -12,15 +12,19 @@ class KNNRegressor:
         self.y = y
 
     def distance(self, X):
-        return np.sqrt(np.sum((self.X[:,None]-X)**2,axis=-1))
+        return np.linalg.norm(self.X - X, axis=1)
+
+    def softmax(self, x):
+        max_x = np.amax(x, 1).reshape(x.shape[0],1)
+        e_x = np.exp(x - max_x)
+        return e_x / e_x.sum(axis=1, keepdims=True) 
 
     def predict(self, X):
-        dists = self.distance(X).T
-        ranks = np.argsort(dists, 1)
-        Ys = []
-        for r in ranks:
-            ys = []
-            for k in range(self.k):
-                ys.append(self.y[np.where(r == k)[0][0]])
-            Ys.append(ys)
-        return np.array(Ys).mean(1)
+        outputs = []
+        for x in X:
+            dists = self.distance(x)
+            idx = dists.argsort()[:self.k]
+            w = dists[idx] / dists[idx].max()
+            ys = self.y[idx]
+            outputs.append(w @ ys)
+        return outputs
