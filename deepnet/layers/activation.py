@@ -50,8 +50,8 @@ class Softmax:
     def Softmax_grad(self, x):
         s = self.forward(x)
         a = np.eye(s.shape[-1])
-        temp1 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
-        temp2 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
-        temp1 = np.einsum('ij,jk->ijk',s,a)
-        temp2 = np.einsum('ij,ik->ijk',s,s)
-        self.dx = temp1-temp2
+        temp1 = np.zeros((s.shape[0], s.shape[1], s.shape[1]))
+        temp2 = np.zeros((s.shape[0], s.shape[1], s.shape[1]))
+        temp1 = np.einsum('ij,jk->ijk', s, a)
+        temp2 = np.einsum('ij,ik->ijk', s, s)
+        self.dx = temp1 - temp2
